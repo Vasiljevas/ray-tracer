@@ -3,7 +3,6 @@ import { Vector } from './vector.js';
 import { Color } from './color.js';
 import { Ray } from './ray.js';
 import { Finish } from './finish.js';
-
 export class Shape {
 
     constructor(appearance) {
@@ -40,7 +39,7 @@ export class Shape {
             let v = Vector.from(point).to(light.position);
 
             // If this point is in shadow, do not add any illumination for this light source
-            if (scene.shapes.some(shape => shape.castsShadowFor(point, v))) return;
+            if (scene.octree.isInShadow(point, v)) return;
 
             let brightness = normal.dot(v.unit());
             if (brightness <= 0) return;            

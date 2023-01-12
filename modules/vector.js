@@ -67,5 +67,12 @@ export class Vector {
     scale = (factor) => new Vector(this.x * factor, this.y * factor, this.z * factor);
 
     static from = (origin) => ({ to: target => target.subtract(origin) });
+
+    distanceTo = other => {
+        let dx = this.x - other.x;
+        let dy = this.y - other.y;
+        let dz = this.z - other.z;
+        return Math.sqrt(dx * dx + dy * dy + dz * dz);
+    }
 }
 

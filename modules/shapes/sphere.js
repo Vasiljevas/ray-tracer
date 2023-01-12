@@ -6,6 +6,7 @@ export class Sphere extends Shape {
         super(appearance);
         this.center = center;
         this.radius = radius;
+        this.position = center;
     }
 
     intersect = ray => {

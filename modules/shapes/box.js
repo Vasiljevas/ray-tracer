@@ -11,6 +11,7 @@ export class Box extends Shape {
         this.lowerCorner = new Vector(Math.min(corner1.x, corner2.x), Math.min(corner1.y, corner2.y), Math.min(corner1.z, corner2.z));
         this.upperCorner = new Vector(Math.max(corner1.x, corner2.x), Math.max(corner1.y, corner2.y), Math.max(corner1.z, corner2.z));
         this.vertices = [this.lowerCorner, this.upperCorner];
+        this.position = new Vector((corner1.x+corner2.x)/2, (corner1.y+corner2.y)/2, (corner1.z+corner2.z)/2);
     }
 
     contains = (point, axis) => this.lowerCorner[axis] < point[axis] && point[axis] < this.upperCorner[axis];

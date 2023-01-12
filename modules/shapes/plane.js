@@ -6,6 +6,7 @@ export class Plane extends Shape {
         super(appearance);
         this.normal = normal;
         this.distance = distance;
+        this.position = normal;
     }
 
     intersect = ray => {
