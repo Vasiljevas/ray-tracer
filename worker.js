@@ -32,7 +32,7 @@ self.addEventListener('message', function (message) {
     switch (data.command) {
         case 'render':
             let renderer = new Renderer(data.width, data.height);
-            let scene = ExampleScenes.AssortedBoxes();
+            let scene = ExampleScenes.AssortedShapes10();
             let callback = makeCallback(data.block, 40);
             renderer.render(scene, callback, data.block);
             self.close();
