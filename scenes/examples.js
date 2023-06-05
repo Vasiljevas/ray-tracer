@@ -44,7 +44,7 @@ export function Spheres10(reflection = 0.5) {
   return new Scene(camera, background, shapes, lights);
 }
 
-export function AssortedShapes50(reflection = 0.5) {
+export function Spheres50(reflection = 0.5) {
   let shiny = new Finish({ shiny: 0.5, reflection: reflection });
   let camera = new Camera(new Vector(-10, 25, -30), new Vector(0, 4, 0));
   let background = new Color(0, 0, 0);
