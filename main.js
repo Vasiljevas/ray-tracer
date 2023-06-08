@@ -154,7 +154,7 @@ function getSceneNumber() {
         return 1;
       case "50":
         return 2;
-      case 100:
+      case "100":
         return 3;
     }
   }
