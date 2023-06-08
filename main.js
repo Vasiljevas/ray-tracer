@@ -133,6 +133,7 @@ function getColumns() {
 
 let runningWorkers = 0;
 function render() {
+  document.getElementById("timer").innerHTML = "";
   window.renderStarted = new Date().valueOf();
   ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
   let rows = getRows();
@@ -186,7 +187,6 @@ function runWorkerForBlock(canvas, block) {
   worker.addEventListener("message", handleMessageFromWorker);
   cancelButton.addEventListener("click", function () {
     worker.terminate();
-    document.getElementById("timer").innerHTML = "Render canceled";
     updateStatus(false);
   });
   worker.postMessage({
