@@ -3,6 +3,11 @@ let ctx = canvas.getContext("2d");
 let renderButton = document.getElementById("render-button");
 let cancelButton = document.getElementById("cancel-button");
 
+let sceneSelect = document.getElementById("scenes");
+let countSelect = document.getElementById("count");
+
+let threadSelect = document.getElementById("threads");
+
 function paintPixel(x, y, color) {
   var rgb = `rgb(${color.r},${color.g},${color.b})`;
   ctx.fillStyle = rgb;
@@ -50,11 +55,89 @@ function partition(width, height, rows, columns) {
   return blocks;
 }
 
+function getRows() {
+  let val = threadSelect.value;
+  switch (val) {
+    case "1":
+      return 1;
+    case "2":
+      return 1;
+    case "3":
+      return 1;
+    case "4":
+      return 2;
+    case "5":
+      return 1;
+    case "6":
+      return 2;
+    case "7":
+      return 1;
+    case "8":
+      return 2;
+    case "9":
+      return 3;
+    case "10":
+      return 2;
+    case "11":
+      return 1;
+    case "12":
+      return 3;
+    case "13":
+      return 1;
+    case "14":
+      return 2;
+    case "15":
+      return 3;
+    case "16":
+      return 4;
+  }
+}
+
+function getColumns() {
+  let val = threadSelect.value;
+  switch (val) {
+    case "1":
+      return 1;
+    case "2":
+      return 2;
+    case "3":
+      return 3;
+    case "4":
+      return 2;
+    case "5":
+      return 5;
+    case "6":
+      return 3;
+    case "7":
+      return 7;
+    case "8":
+      return 4;
+    case "9":
+      return 3;
+    case "10":
+      return 5;
+    case "11":
+      return 11;
+    case "12":
+      return 4;
+    case "13":
+      return 13;
+    case "14":
+      return 7;
+    case "15":
+      return 5;
+    case "16":
+      return 4;
+  }
+}
+
 let runningWorkers = 0;
 function render() {
   window.renderStarted = new Date().valueOf();
   ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-  let blocks = partition(ctx.canvas.width, ctx.canvas.height, 4, 2);
+  let rows = getRows();
+  let columns = getColumns();
+  let blocks = partition(ctx.canvas.width, ctx.canvas.height, rows, columns);
   ctx.strokeStyle = "#999";
   blocks.forEach((block) => {
     ctx.strokeRect(block.x, block.y, block.width, block.height);
@@ -64,12 +147,46 @@ function render() {
   updateStatus(true);
 }
 
+function getSceneNumber() {
+  if (sceneSelect.value === "Spheres") {
+    switch (countSelect.value) {
+      case "10":
+        return 1;
+      case "50":
+        return 2;
+      case 100:
+        return 3;
+    }
+  }
+  if (sceneSelect.value === "Boxes") {
+    switch (countSelect.value) {
+      case "10":
+        return 4;
+      case "50":
+        return 5;
+      case "100":
+        return 6;
+    }
+  }
+  switch (countSelect.value) {
+    case "10":
+      return 7;
+    case "50":
+      return 8;
+    case "100":
+      return 9;
+  }
+  return 1;
+}
+
 function runWorkerForBlock(canvas, block) {
   console.log("new worker!");
+  let sceneNumber = getSceneNumber();
   let worker = new Worker("worker.js", { type: "module" });
   worker.addEventListener("message", handleMessageFromWorker);
   cancelButton.addEventListener("click", function () {
     worker.terminate();
+    document.getElementById("timer").innerHTML = "Render canceled";
     updateStatus(false);
   });
   worker.postMessage({
@@ -77,6 +194,7 @@ function runWorkerForBlock(canvas, block) {
     width: canvas.width,
     height: canvas.height,
     block: block,
+    scene: sceneNumber,
   });
 }
 
@@ -85,7 +203,9 @@ function updateStatus(running) {
   cancelButton.disabled = !running;
   if (!running) {
     var elapsed = new Date().valueOf() - window.renderStarted;
-    console.log(`Render completed in ${elapsed / 1000} seconds`);
+    var output = `Rendered for ${elapsed / 1000} seconds`;
+    console.log(output);
+    document.getElementById("timer").innerHTML = output;
   }
 }
 

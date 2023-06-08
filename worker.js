@@ -34,12 +34,35 @@ function makeCallback(block, rowsPerCallback = 1) {
   return callback;
 }
 
+function getScene(sceneNumber) {
+  switch (sceneNumber) {
+    case 1:
+      return SphereScenes.Spheres10();
+    case 2:
+      return SphereScenes.Spheres50();
+    case 3:
+      return SphereScenes.Spheres100();
+    case 4:
+      return BoxScenes.Boxes10();
+    case 5:
+      return BoxScenes.Boxes50();
+    case 6:
+      return BoxScenes.Boxes100();
+    case 7:
+      return MixedScenes.Mixed10();
+    case 8:
+      return MixedScenes.Mixed50();
+    case 9:
+      return MixedScenes.Mixed100();
+  }
+}
+
 self.addEventListener("message", function (message) {
   let data = message.data;
   switch (data.command) {
     case "render":
       let renderer = new Renderer(data.width, data.height);
-      let scene = MixedScenes.Mixed100();
+      let scene = getScene(data.scene);
       let callback = makeCallback(data.block, 40);
       renderer.render(scene, callback, data.block);
       self.close();
